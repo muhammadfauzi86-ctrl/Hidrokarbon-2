@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chemistry Explorer</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2fafb;--card:#fff;--tx:#0b2545;--mu:#4a6178;--pri:#0b2545;--ac:#14b8a6;--cy:#22d3ee;--bd:#d3e6ea;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#07162b;--card:#0e2547;--tx:#e8f4f8;--mu:#9db6c8;--pri:#22d3ee;--bd:#1d3a63}}
+:root[data-theme=dark]{--bg:#07162b;--card:#0e2547;--tx:#e8f4f8;--mu:#9db6c8;--pri:#22d3ee;--bd:#1d3a63}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.6 'Plus Jakarta Sans','Segoe UI',system-ui,sans-serif}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:linear-gradient(90deg,#0b2545,#0f766e);color:#fff;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 14px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:#0b2545;z-index:10}
+.logo{font-weight:800;font-size:18px;margin-right:auto;cursor:pointer;background:none;border:0;color:#fff}
+nav{display:flex;gap:4px;overflow-x:auto;max-width:100%}
+nav button,.ic{background:transparent;border:0;color:#d9f5f2;padding:6px 10px;border-radius:99px;cursor:pointer;font:inherit;font-size:13px;white-space:nowrap}
+nav button.on{background:var(--cy);color:#06283d;font-weight:600}
+main{max-width:980px;margin:auto;padding:18px 14px 40px}
+.pg{display:none}.pg.on{display:block;animation:f .3s}@keyframes f{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.pg.on{animation:none}}
+h1{font-size:clamp(28px,6vw,46px);line-height:1.1;margin:.2em 0}h2{margin:.2em 0 .5em}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:16px;margin:10px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.hero{background:linear-gradient(135deg,#0b2545,#0e7490 70%,#14b8a6);color:#fff;border-radius:24px;padding:28px 22px;display:grid;grid-template-columns:1.2fr 1fr;gap:16px;align-items:center}
+@media(max-width:700px){.hero{grid-template-columns:1fr}}
+.btn{background:var(--ac);color:#04263a;border:0;border-radius:12px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer;margin:4px 6px 4px 0}
+.btn.o{background:transparent;border:2px solid var(--cy);color:inherit}.btn:disabled{opacity:.45;cursor:not-allowed}
+.dash{cursor:pointer;text-align:left;font:inherit;color:var(--tx)}.dash:hover{border-color:var(--ac)}
+.bar{height:12px;background:var(--bd);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--cy));transition:width .5s}
+.opt{display:block;width:100%;text-align:left;margin:6px 0;padding:10px 12px;border-radius:12px;border:2px solid var(--bd);background:var(--card);color:var(--tx);font:inherit;cursor:pointer}
+.opt.ok{border-color:#16a34a;background:#16a34a22}.opt.no{border-color:#dc2626;background:#dc262622}.opt.sel{border-color:var(--ac)}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid var(--bd);padding:6px 10px;text-align:left}
+details{border:1px solid var(--bd);border-radius:12px;padding:8px 12px;margin:8px 0}summary{cursor:pointer;font-weight:600}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}.tabs button{border:1px solid var(--bd);background:var(--card);color:var(--tx);padding:8px 14px;border-radius:99px;font:inherit;cursor:pointer}.tabs .on{background:var(--ac);color:#04263a;font-weight:600}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#0f766e;color:#fff;padding:10px 18px;border-radius:99px;opacity:0;transition:.3s;pointer-events:none;z-index:20}#toast.s{opacity:1}
+svg{max-width:100%}.mol{touch-action:none;cursor:grab;background:radial-gradient(circle,#0e7490,#0b2545);border-radius:18px;width:100%;height:300px}
+.c{background:var(--bd);border-radius:12px;padding:8px;display:inline-block;margin:4px;text-align:center}
+footer{text-align:center;color:var(--mu);font-size:14px;padding:20px}
+</style></head><body>
+<header><button class="logo" data-p="home">⚛ Chemistry Explorer</button>
+<nav id="nav"></nav><button class="ic" id="snd" title="Suara">🔊</button><button class="ic" id="thm" title="Tema">🌓</button></header>
+<main>
+<section class="pg" id="home">
+<div class="hero"><div><h1>Jelajahi Dunia Hidrokarbon!</h1><p>Belajar Kimia Lebih Mudah, Interaktif, dan Menyenangkan.</p>
+<button class="btn" data-p="panduan">Mulai Pembelajaran</button><button class="btn o" data-p="materi">Jelajahi Materi</button></div>
+<svg viewBox="0 0 240 150" aria-label="Metana, etana, propana, butana"><g fill="#fff" opacity=".9"><circle cx="40" cy="40" r="14" fill="#334155"/><circle cx="40" cy="12" r="7"/><circle cx="14" cy="48" r="7"/><circle cx="66" cy="48" r="7"/><circle cx="40" cy="70" r="7"/>
+<circle cx="130" cy="40" r="14" fill="#334155"/><circle cx="170" cy="40" r="14" fill="#334155"/><circle cx="130" cy="12" r="7"/><circle cx="110" cy="54" r="7"/><circle cx="150" cy="70" r="7"/><circle cx="170" cy="12" r="7"/><circle cx="196" cy="54" r="7"/></g>
+<g stroke="#fff" stroke-width="3" opacity=".6"><path d="M40 40V12M40 40L14 48M40 40L66 48M40 40V70M130 40H170M130 40V12M130 40L110 54M170 40V12M170 40L196 54"/></g>
+<text x="14" y="110" fill="#fff" font-size="13">Metana · Etana · Propana · Butana</text></svg></div>
+<div class="card"><b>Progress belajar: <span id="pp">0</span>%</b><div class="bar"><i id="pb"></i></div><p id="pinfo" style="color:var(--mu);margin:.4em 0 0"></p>
+<button class="btn o" id="reset" style="color:var(--tx)">Reset progres</button></div>
+<div class="grid" id="dash"></div></section>
+
+<section class="pg" id="panduan"><h2>🧭 Panduan Penggunaan</h2><div class="card"><ol id="gl"></ol></div><button class="btn" data-p="tujuan" data-d="panduan">Saya Mengerti, Mulai Belajar</button></section>
+
+<section class="pg" id="tujuan"><h2>🎯 Tujuan Pembelajaran</h2><div class="grid" id="tj"></div>
+<div class="card"><b>Indikator keberhasilan:</b> skor latihan ≥ 70 dan seluruh gim selesai.</div><button class="btn" data-p="materi" data-d="tujuan">Lanjut ke Materi</button></section>
+
+<section class="pg" id="materi"><h2>📘 Materi Pembelajaran</h2>
+<div class="tabs"><button class="on" data-m="m1">Materi 1: Kekhasan Atom Karbon</button><button data-m="m2">Materi 2: Senyawa Alkana</button></div>
+<div id="m1" class="mt card">
+<details open><summary>Unsur karbon & elektron valensi</summary><p>Karbon (C) memiliki nomor atom Z = 6, konfigurasi elektron 1s² 2s² 2p², sehingga elektron valensinya 4. Struktur Lewis: C dikelilingi 4 titik elektron.</p><svg viewBox="0 0 200 70" height="70"><circle cx="35" cy="35" r="8" fill="#334155"/><circle cx="35" cy="35" r="18" fill="none" stroke="#22d3ee"/><circle cx="35" cy="35" r="30" fill="none" stroke="#14b8a6"/><circle cx="17" cy="35" r="4" fill="#22d3ee"/><circle cx="53" cy="35" r="4" fill="#22d3ee"/><text x="80" y="30" fill="currentColor" font-size="13">Lewis: ·Ċ· (4 elektron valensi)</text><text x="80" y="50" fill="currentColor" font-size="13">K=2, L=4</text></svg></details>
+<details><summary>Empat ikatan kovalen & katenasi</summary><p>Dengan 4 elektron valensi, karbon membentuk 4 ikatan kovalen (misalnya CH₄ tetrahedral). Karbon juga dapat berikatan dengan sesama karbon (<b>katenasi</b>) membentuk rantai lurus, bercabang, atau siklik (cincin, mis. sikloheksana).</p><p>Contoh: lurus CH₃–CH₂–CH₂–CH₃; bercabang CH₃–CH(CH₃)–CH₃.</p></details>
+<details><summary>Ikatan tunggal, rangkap dua, rangkap tiga</summary><p>Tunggal: C–C (etana); rangkap dua: C=C (etena); rangkap tiga: C≡C (etuna). Contoh dalam kehidupan: LPG (propana–butana), bensin, plastik, gula, protein.</p></details>
+<p><b>Ringkasan:</b> karbon tetravalen dan mampu katenasi sehingga senyawanya sangat banyak.</p><p><i>Refleksi: mengapa jumlah senyawa karbon jauh lebih banyak daripada unsur lain?</i></p>
+<button class="btn" data-m="m2">Materi Selanjutnya</button></div>
+<div id="m2" class="mt card" hidden>
+<details open><summary>Pengertian, rumus umum & deret homolog</summary><p>Alkana adalah hidrokarbon jenuh (hanya ikatan tunggal C–C dan C–H). Rumus umum rantai terbuka: <b>CₙH₂ₙ₊₂</b>. Selisih antar suku berurutan: CH₂.</p><div style="overflow-x:auto"><table id="hom"></table></div></details>
+<details><summary>Tata nama IUPAC</summary><p>1) Pilih rantai karbon terpanjang sebagai rantai utama. 2) Beri nomor dari ujung yang memberi cabang nomor terkecil. 3) Nama cabang (alkil: metil, etil) ditulis sebelum rantai utama, diurutkan abjad.</p><p>Contoh: CH₃–CH(CH₃)–CH₂–CH₃ → <b>2-metilbutana</b>.</p></details>
+<details><summary>Isomer, sifat & kegunaan</summary><p>Isomer rantai: C₄H₁₀ memiliki 2 isomer: butana dan 2-metilpropana. Sifat fisika: nonpolar, tidak larut air, titik didih naik seiring rantai bertambah. Sifat kimia: relatif tidak reaktif; dapat terbakar dan mengalami substitusi. Kegunaan: bahan bakar (LPG, bensin), pelarut, bahan baku petrokimia.</p></details>
+<details><summary>Contoh soal</summary><p>Alkana dengan 12 atom H? 2n+2 = 12 → n = 5 → pentana (C₅H₁₂).</p></details>
+<p><i>Refleksi: bagaimana ikatan C–C membuat alkana stabil?</i></p>
+<button class="btn" data-m="m1">Materi Sebelumnya</button><button class="btn" data-p="lab" data-d="m2">Ke Virtual Lab</button><button class="btn o" data-m="m1" style="color:var(--tx)">Kembali ke Daftar Materi</button></div></section>
+
+<section class="pg" id="lab"><h2>🧪 Virtual Molecule Lab</h2><div class="tabs" id="mt"></div>
+<svg class="mol" id="mol" viewBox="-150 -150 300 300"></svg>
+<label>Zoom <input type="range" id="zm" min="40" max="110" value="70"></label> <button class="btn o" id="oth" style="color:var(--tx)">Eksplorasi Molekul Lain</button>
+<div class="card" id="mi"></div></section>
+
+<section class="pg" id="gim"><h2>🎮 Gim Interaktif</h2><div class="tabs"><button data-g="g1" class="on">Molecule Quiz Challenge</button><button data-g="g2">Carbon Builder</button><button data-g="g3">Hydrocarbon Detective</button></div><div id="gb" class="card"></div></section>
+
+<section class="pg" id="latihan"><h2>📝 Latihan Soal</h2><div id="qb" class="card"></div></section>
+
+<section class="pg" id="ref"><h2>📚 Referensi</h2><div class="grid">
+<div class="card"><b>IUPAC Nomenclature of Organic Chemistry (Blue Book)</b><br><small>IUPAC</small><p>Aturan resmi tata nama senyawa organik.</p><a class="btn" href="https://iupac.org/what-we-do/nomenclature/" target="_blank" rel="noopener">Buka sumber</a></div>
+<div class="card"><b>IUPAC Compendium of Chemical Terminology (Gold Book)</b><br><small>IUPAC</small><p>Definisi istilah kimia baku, termasuk alkana.</p><a class="btn" href="https://goldbook.iupac.org" target="_blank" rel="noopener">Buka sumber</a></div>
+<div class="card"><b>Buku Teks Pelajaran (Kimia SMA/MA Kelas XI)</b><br><small>Kementerian Pendidikan, Kebudayaan, Riset, dan Teknologi</small><p>Buku teks resmi sesuai kurikulum; cari judul Kimia kelas XI.</p><a class="btn" href="https://buku.kemdikbud.go.id" target="_blank" rel="noopener">Buka sumber</a></div>
+<div class="card"><b>Organic Chemistry (LibreTexts)</b><br><small>LibreTexts, jaringan pendidikan terbuka</small><p>Bahan ajar terbuka tentang alkana dan hidrokarbon.</p><a class="btn" href="https://chem.libretexts.org" target="_blank" rel="noopener">Buka sumber</a></div></div></section>
+</main>
+<footer><b>PENGEMBANG: Muhammad Iskandar Fauzi</b><br>Chemistry Explorer · Media Pembelajaran Interaktif Kimia Kelas XI · Materi Hidrokarbon: Kekhasan Atom Karbon dan Senyawa Alkana · 2026</footer>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S={done:{},score:null,badges:[],snd:1};
+try{Object.assign(S,JSON.parse(localStorage.getItem('ce')||'{}'))}catch(e){}
+const sv=()=>{try{localStorage.setItem('ce',JSON.stringify(S))}catch(e){}};
+const PG=[['home','Beranda'],['panduan','Panduan'],['tujuan','Tujuan'],['materi','Materi'],['lab','Virtual Lab'],['gim','Gim'],['latihan','Latihan'],['ref','Referensi']];
+const KEYS=['panduan','tujuan','m1','m2','lab','g1','g2','g3','quiz'];
+function beep(f){if(!S.snd)return;try{const a=new AudioContext(),o=a.createOscillator();o.frequency.value=f;o.connect(a.destination);o.start();o.stop(a.currentTime+.12)}catch(e){}}
+function toast(t,f){const e=$('#toast');e.textContent=t;e.classList.add('s');setTimeout(()=>e.classList.remove('s'),2200);beep(f||660)}
+function done(k,msg){if(!S.done[k]){S.done[k]=1;toast('✅ '+(msg||'Aktivitas selesai!'));}sv();prog()}
+function prog(){const n=KEYS.filter(k=>S.done[k]).length,p=Math.round(n/KEYS.length*100);$('#pp').textContent=p;$('#pb').style.width=p+'%';
+$('#pinfo').textContent=`Aktivitas selesai: ${n}/${KEYS.length} · Nilai latihan: ${S.score==null?'belum ada':S.score}`}
+function go(p){$$('.pg').forEach(e=>e.classList.toggle('on',e.id==p));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.p==p));scrollTo(0,0);
+if(p=='lab')lab(cur);if(p=='gim')game('g1');if(p=='latihan'&&!qs.on)startQ();if(p=='materi')mat('m1')}
+$('#nav').innerHTML=PG.map(x=>`<button data-p="${x[0]}">${x[1]}</button>`).join('');
+$('#dash').innerHTML=PG.slice(1).map(x=>`<button class="card dash" data-p="${x[0]}"><b>${x[1]}</b></button>`).join('');
+document.addEventListener('click',e=>{const b=e.target.closest('[data-p]');if(b){if(b.dataset.d)done(b.dataset.d);go(b.dataset.p)}
+const m=e.target.closest('[data-m]');if(m)mat(m.dataset.m);const g=e.target.closest('[data-g]');if(g)game(g.dataset.g)});
+$('#thm').onclick=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()=='#07162b';r.dataset.theme=d?'light':'dark'};
+$('#snd').onclick=()=>{S.snd=S.snd?0:1;$('#snd').textContent=S.snd?'🔊':'🔇';sv()};
+$('#reset').onclick=()=>{if(confirm('Hapus semua progres?')){S={done:{},score:null,badges:[],snd:S.snd};sv();qs.on=0;prog()}};
+$('#gl').innerHTML=['🏠 Buka halaman utama.','🧭 Pelajari menu Panduan Penggunaan.','🎯 Buka Tujuan Pembelajaran.','📘 Pelajari materi berurutan.','🧪 Amati struktur di Virtual Molecule Lab.','🎮 Mainkan tiga gim interaktif.','📝 Kerjakan 10 soal pilihan ganda.','📊 Periksa hasil dan pembahasan.','🔁 Ulangi materi yang belum dikuasai.'].map(x=>`<li>${x}</li>`).join('');
+$('#tj').innerHTML=['Menjelaskan kekhasan atom karbon','Konfigurasi elektron & elektron valensi','Empat ikatan kovalen','Rantai karbon (katenasi)','Ikatan tunggal, rangkap dua, rangkap tiga','Pengertian & karakteristik alkana','Rumus umum alkana','Struktur & rumus molekul alkana','Tata nama alkana IUPAC','Isomer & sifat alkana'].map(x=>`<div class="card">🎯 ${x}</div>`).join('');
+const N=['Metana','Etana','Propana','Butana','Pentana','Heksana','Heptana','Oktana','Nonana','Dekana'];
+$('#hom').innerHTML='<tr><th>Nama</th><th>Rumus Molekul</th></tr>'+N.map((n,i)=>`<tr><td>${n}</td><td>C${i+1>1?'<sub>'+(i+1)+'</sub>':''}H<sub>${2*(i+1)+2}</sub></td></tr>`).join('');
+function mat(id){$$('.mt').forEach(e=>e.hidden=e.id!=id);$$('[data-m].on, .tabs button[data-m]').forEach(b=>b.classList.toggle('on',b.dataset.m==id&&b.closest('.tabs')));done(id)}
+/* LAB */
+let cur=0,rx=-.4,ry=.6,sc=70;
+function build(n){const A=[],B=[];if(n==1){A.push([0,0,0,'C']);[[1,1,1],[1,-1,-1],[-1,1,-1],[-1,-1,1]].forEach(v=>{A.push([v[0]*.62,v[1]*.62,v[2]*.62,'H']);B.push([0,A.length-1])});return[A,B]}
+for(let i=0;i<n;i++){const y=(i%2)*.9;A.push([(i-(n-1)/2)*1.3,y-.45,0,'C']);if(i)B.push([i-1,i])}
+for(let i=0;i<n;i++){const c=A[i],d=(i%2)?1:-1,e=i==0?-1:i==n-1?1:0;const hs=[];
+if(n>1&&(i==0||i==n-1)){const s=i==0?-1:1;hs.push([s*.55,d*.8,0],[s*.45,-d*.25,.85],[s*.45,-d*.25,-.85])}else hs.push([0,d*.7,.8],[0,d*.7,-.8]);
+hs.forEach(h=>{A.push([c[0]+h[0],c[1]+h[1],c[2]+h[2],'H']);B.push([i,A.length-1])})}return[A,B]}
+$('#mt').innerHTML=N.slice(0,4).map((n,i)=>`<button data-i="${i}">${n}</button>`).join('');
+$('#mt').onclick=e=>{if(e.target.dataset.i)lab(+e.target.dataset.i)};$('#oth').onclick=()=>lab((cur+1)%4);
+function draw(){const [A,B]=build(cur+1),cx=Math.cos(rx),sx=Math.sin(rx),cy=Math.cos(ry),sy=Math.sin(ry);
+const P=A.map(a=>{let x=a[0]*cy+a[2]*sy,z=-a[0]*sy+a[2]*cy,y=a[1]*cx-z*sx;z=a[1]*sx+z*cx;return[x*sc,y*sc,z,a[3]]});
+let o='';B.forEach(b=>o+=`<line x1="${P[b[0]][0]}" y1="${P[b[0]][1]}" x2="${P[b[1]][0]}" y2="${P[b[1]][1]}" stroke="#cbd5e1" stroke-width="5" opacity=".8"/>`);
+P.map((p,i)=>i).sort((a,b)=>P[a][2]-P[b][2]).forEach(i=>{const p=P[i],c=p[3]=='C';o+=`<circle cx="${p[0]}" cy="${p[1]}" r="${c?(sc*.3):(sc*.17)}" fill="${c?'#334155':'#fff'}" stroke="#22d3ee"/>`});$('#mol').innerHTML=o}
+function lab(i){cur=i;const n=i+1,fm=`C${n>1?n:''}H${2*n+2}`,cc=n-1,ch=2*n+2;
+$$('#mt button').forEach((b,j)=>b.classList.toggle('on',j==i));draw();
+const st=['H–C(H)(H)–H','CH₃–CH₃','CH₃–CH₂–CH₃','CH₃–CH₂–CH₂–CH₃'][i];
+$('#mi').innerHTML=`<b>${N[i]}</b> · Rumus molekul: ${fm}<br>Rumus struktur: ${st}<br>Atom C: ${n} · Atom H: ${ch}<br>Ikatan C–C: ${cc} · Ikatan C–H: ${ch}<br>Geometri: tetrahedral di sekitar tiap atom C, sudut ikatan ≈ 109,5°.<br><small>Hitam = karbon, putih = hidrogen. Seret untuk memutar; geser slider untuk zoom. Model disederhanakan untuk rantai panjang.</small>`;done('lab','Lab virtual dijelajahi!')}
+const M=$('#mol');let dr=0,lx,ly;M.onpointerdown=e=>{dr=1;lx=e.clientX;ly=e.clientY;M.setPointerCapture(e.pointerId)};M.onpointerup=()=>dr=0;
+M.onpointermove=e=>{if(!dr)return;ry+=(e.clientX-lx)*.01;rx+=(e.clientY-ly)*.01;lx=e.clientX;ly=e.clientY;draw()};$('#zm').oninput=e=>{sc=+e.target.value;draw()};
+/* QUESTIONS */
+const Q=[['Konfigurasi elektron atom karbon (Z = 6) adalah …',['1s² 2s² 2p²','1s² 2s² 2p⁴','1s² 2s⁴','1s² 2p⁴'],0,'Z = 6 → 1s² 2s² 2p², elektron valensi 4.'],
+['Jumlah elektron valensi atom karbon adalah …',['2','4','6','8'],1,'Kulit terluar (n=2) berisi 2 + 2 = 4 elektron.'],
+['Kemampuan atom karbon berikatan dengan sesama atom karbon disebut …',['Hibridisasi','Polimerisasi','Katenasi','Isomerisasi'],2,'Katenasi membentuk rantai C–C.'],
+['Senyawa berikut yang memiliki ikatan rangkap tiga adalah …',['C₂H₆','C₂H₄','C₂H₂','CH₄'],2,'Etuna (C₂H₂): HC≡CH.'],
+['Atom C membentuk ikatan kovalen paling banyak sebanyak … ikatan.',['2','3','4','5'],2,'Karbon tetravalen: 4 ikatan kovalen.'],
+['Rumus umum alkana rantai terbuka adalah …',['CₙH₂ₙ','CₙH₂ₙ₊₂','CₙH₂ₙ₋₂','CₙHₙ'],1,'Alkana: CₙH₂ₙ₊₂.'],
+['Rumus molekul heptana adalah …',['C₆H₁₄','C₇H₁₆','C₇H₁₄','C₈H₁₈'],1,'n = 7 → H = 2(7)+2 = 16.'],
+['Nama IUPAC CH₃–CH(CH₃)–CH₂–CH₃ adalah …',['Pentana','2-metilbutana','3-metilbutana','Isobutana'],1,'Rantai utama 4 C (butana), cabang metil di C-2 (penomoran terkecil).'],
+['Jumlah isomer rantai C₄H₁₀ adalah …',['1','2','3','4'],1,'Butana dan 2-metilpropana.'],
+['Alkana dengan 22 atom hidrogen bernama …',['Nonana','Dekana','Undekana','Oktana'],1,'2n+2 = 22 → n = 10 → dekana (C₁₀H₂₂).']];
+const qs={on:0,i:0,a:[]};
+function startQ(){qs.on=1;qs.i=0;qs.a=Array(10).fill(null);qs.d=Array(10).fill(0);showQ()}
+function showQ(){const i=qs.i,q=Q[i],sub=qs.d[i];$('#qb').innerHTML=`<div class="bar"><i style="width:${qs.d.filter(x=>x).length*10}%"></i></div><p>Soal ${i+1} dari 10 · ${i<5?'Kekhasan karbon':'Alkana'}</p><h3>${q[0]}</h3>`+
+q[1].map((o,j)=>`<button class="opt ${qs.a[i]==j?(sub?(j==q[2]?'ok':'no'):'sel'):(sub&&j==q[2]?'ok':'')}" data-o="${j}" ${sub?'disabled':''}>${'ABCD'[j]}. ${o}</button>`).join('')+
+(sub?`<p><b>${qs.a[i]==q[2]?'✅ Benar (+10)':'❌ Salah (0)'}</b> Pembahasan: ${q[3]}</p>`:`<button class="btn" id="kr" ${qs.a[i]==null?'disabled':''}>Kirim Jawaban</button>`)+
+`<hr><button class="btn o" id="pv" style="color:var(--tx)" ${i?'':'disabled'}>Sebelumnya</button><button class="btn" id="nx" ${sub?'':'disabled'}>${i==9?'Lihat Hasil':'Selanjutnya'}</button>`;
+$$('.opt').forEach(b=>b.onclick=()=>{qs.a[i]=+b.dataset.o;showQ()});
+if($('#kr'))$('#kr').onclick=()=>{qs.d[i]=1;beep(qs.a[i]==q[2]?880:300);showQ()};$('#pv').onclick=()=>{qs.i--;showQ()};$('#nx').onclick=()=>i==9?resQ():(qs.i++,showQ())}
+function resQ(){const ok=Q.map((q,i)=>qs.a[i]==q[2]),n=ok.filter(Boolean).length,sc=n*10,k=sc>=90?'Sangat Baik':sc>=80?'Baik':sc>=70?'Cukup':'Perlu Belajar Kembali';S.score=sc;done('quiz','Latihan selesai! Nilai '+sc);
+const wr=ok.map((v,i)=>v?'':i).filter(x=>x!=='');
+$('#qb').innerHTML=`<h3>Hasil Evaluasi</h3><p>Benar: ${n} · Salah: ${10-n}<br>Nilai akhir: <b>${sc}</b> · Ketuntasan: ${sc}% · Kategori: <b>${k}</b></p><div class="bar"><i style="width:${sc}%"></i></div>
+<p>Grafik per soal: ${ok.map((v,i)=>`<span class="c" style="background:${v?'#16a34a55':'#dc262655'}">${i+1}${v?'✔':'✘'}</span>`).join('')}</p>
+<p><b>Rekomendasi:</b> ${wr.length?(wr.some(i=>i<5)?'Ulangi Materi 1. ':'')+(wr.some(i=>i>=5)?'Ulangi Materi 2. ':''):'Pertahankan! Semua jawaban benar.'}</p>
+${Q.map((q,i)=>`<details><summary>${i+1}. ${ok[i]?'✅':'❌'} ${q[0]}</summary>Jawaban: ${q[1][q[2]]}. ${q[3]}</details>`).join('')}
+<button class="btn" id="rp">Ulangi Latihan</button>`;$('#rp').onclick=startQ}
+/* GAMES */
+function game(id){$$('[data-g]').forEach(b=>b.classList.toggle('on',b.dataset.g==id));({g1,g2,g3})[id]()}
+function fin(id,sc,max,badge){done(id,'Gim selesai! Skor '+sc);if(!S.badges.includes(badge)){S.badges.push(badge);sv()}
+$('#gb').innerHTML=`<h3>Hasil Akhir</h3><p>Skor: <b>${sc}/${max}</b> 🏅 Badge: ${badge}<br>${sc>=max*.7?'Hebat, terus semangat!':'Ayo coba lagi, kamu pasti bisa!'}</p><button class="btn" id="ag">Main Lagi</button>`;$('#ag').onclick=()=>game(id)}
+function mc(id,items,badge,pts){let i=0,sc=0;(function r(){const q=items[i];$('#gb').innerHTML=`<div class="bar"><i style="width:${i/items.length*100}%"></i></div><p>Skor ${sc} · ${i+1}/${items.length}</p><h3>${q[0]}</h3>`+q[1].map((o,j)=>`<button class="opt" data-j="${j}">${o}</button>`).join('')+'<p id="fb"></p>';
+$$('#gb .opt').forEach(b=>b.onclick=()=>{$$('#gb .opt').forEach(x=>x.disabled=1);const ok=+b.dataset.j==q[2];b.classList.add(ok?'ok':'no');if(ok){sc+=pts;beep(880)}else{beep(300);$$('#gb .opt')[q[2]].classList.add('ok')}
+$('#fb').textContent=(ok?'Benar! +'+pts:'Kurang tepat.')+' '+(q[3]||'');setTimeout(()=>{++i<items.length?r():fin(id,sc,items.length*pts,badge)},1400)})})()}
+function g1(){mc('g1',[['Elektron valensi karbon?',['2','4','6','8'],1],['Karbon dapat membentuk … ikatan kovalen',['2','3','4','5'],2],['Rumus umum alkana?',['CₙH₂ₙ','CₙH₂ₙ₊₂','CₙHₙ','CₙH₂ₙ₋₂'],1],['Rumus molekul propana?',['C₂H₆','C₃H₆','C₃H₈','C₄H₁₀'],2],['Nama C₅H₁₂?',['Butana','Pentana','Heksana','Propana'],1],['Nama C₄H₁₀?',['Propana','Butana','Etana','Metana'],1]],'Quiz Master',10)}
+function g3(){mc('g3',[['🔍 Mudah — Alkana memiliki 4 atom karbon. Nama & rumusnya?',['Propana, C₃H₈','Butana, C₄H₁₀','Pentana, C₅H₁₂','Etana, C₂H₆'],1,'Petunjuk: Butana, bahan LPG.'],['🔍 Sedang — Alkana dengan 12 atom H?',['Butana','Pentana','Heksana','Propana'],1,'2n+2=12 → n=5.'],['🔍 Sulit — Alkana 8 C dengan satu cabang metil di C-2 pada rantai 7 C; nama dan rumus molekulnya?',['2-metilheptana, C₈H₁₈','3-metilheksana, C₇H₁₆','2-metiloktana, C₉H₂₀','2-metilheksana, C₈H₁₈'],0,'Rantai utama 7 C + 1 cabang = 8 C → C₈H₁₈.']],'Detektif Kimia',30)}
+const L=[['Level 1: Metana',[0],[0]],['Level 2: Etana (C–C)',[0,1],[[0,1]]],['Level 3: Isobutana (2-metilpropana)',[0,1,2,3],[[0,1],[0,2],[0,3]]]];
+function g2(){let l=0,sc=0;(function r(){const [t,cs,ed]=L[l],cc=cs.map(i=>ed.filter(e=>e.includes(i)).length),h=cs.map(()=>0);
+const v=()=>$('#gb').innerHTML=`<p>Skor ${sc} · ${t}</p><p>Susun atom H: tiap C harus punya 4 ikatan. Ikatan C–C: ${ed.map(e=>`C${e[0]+1}–C${e[1]+1}`).join(', ')||'tidak ada'}.</p>`+cs.map(i=>`<div class="c"><b>C${i+1}</b><br>C–C: ${cc[i]}<br>H: ${h[i]}<br><button class="btn" data-a="${i}">+H</button><button class="btn o" style="color:var(--tx)" data-r="${i}">−H</button></div>`).join('')+'<br><button class="btn" id="ck">Periksa Struktur</button><p id="fb"></p>';
+v();$('#gb').onclick=e=>{const a=e.target.dataset;if(a.a!==undefined&&h[a.a]<4){h[a.a]++;v()}if(a.r!==undefined&&h[a.r]>0){h[a.r]--;v()}
+if(e.target.id=='ck'){const bad=cs.filter(i=>h[i]+cc[i]!=4);if(bad.length){$('#fb').textContent='Belum tepat: C'+(bad[0]+1)+' punya '+(h[bad[0]]+cc[bad[0]])+' ikatan, harus 4.';beep(300)}else{sc+=10;beep(880);$('#fb').textContent='Benar! +10';setTimeout(()=>++l<3?r():fin('g2',sc,30,'Arsitek Molekul'),1200)}}}})()}
+$('#snd').textContent=S.snd?'🔊':'🔇';prog();go('home');
+</script></body></html>
